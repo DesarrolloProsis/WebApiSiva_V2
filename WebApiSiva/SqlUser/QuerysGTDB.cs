@@ -10,7 +10,46 @@ namespace WebApiSiva.SqlUser
 {
     public class QuerysGTDB
     {
+        public object ObtnerMovimientoTag(string numCuenta, string numTag, string fechaInicio, string fechaFin)
+        {
+            string query = "Select Concepto, DateTOperacion, Monto from OperacionesCajeroes where DateTOperacion >= '" + fechaInicio + "' and DateTOperacion < '" + fechaFin + "' and Numero = '" + numTag + "'";
 
+            var dtRecargas = ConsultasInternas(query);
+
+            List<Array> value1 = new List<Array>();
+
+            foreach (DataRow item in dtRecargas.Rows)
+            {
+                string[] movimientoRecargas = new string[3];
+
+                movimientoRecargas[0] = item["Concepto"].ToString();
+                movimientoRecargas[1] = item["DateTOperacion"].ToString();
+                movimientoRecargas[2] = item["Monto"].ToString();
+
+                value1.Add(movimientoRecargas);
+            }
+
+            query = "select Fecha, Saldo from Historico where Fecha >= '" + fechaInicio + "' and Fecha < '" + fechaFin + "' and Tag = '" + numTag + "'";
+
+            var dtCruces = ConsultasInternas(query);
+
+            foreach (DataRow item2 in dtCruces.Rows)
+            {
+                string[] movimientoCruces = new string[3];
+
+                movimientoCruces[0] = "PEAJE";
+                movimientoCruces[1] = item2["Fecha"].ToString();
+                movimientoCruces[2] = item2["Saldo"].ToString();
+
+                value1.Add(movimientoCruces);
+
+
+            }
+
+            object Json = new { value1 };
+
+            return Json;
+        }
 
         public Object ObtenerMovimientoCuenta(string IdCuenta, string numCuenta, string fechaInicio, string fechaFin)
         {
@@ -67,7 +106,6 @@ namespace WebApiSiva.SqlUser
 
                 value1.Add(movimientoCruces);
 
-
             }
 
 
@@ -88,35 +126,35 @@ namespace WebApiSiva.SqlUser
             List<Array> value1 = new List<Array>();
             List<Array> value2 = new List<Array>();
 
-
-
-            foreach (DataRow item in dtCuentas.Rows)
-            {
-                query = "select NumTag from Tags where CuentaId = '" + item["Id"].ToString() + "'";
-
-                var tagAsociados = ConsultasInternas(query);
-
-                string[] cuentaId = new string[3];
-
-                cuentaId[0] = item["Id"].ToString();
-                cuentaId[1] = item["NumCuenta"].ToString();
-                cuentaId[2] = item["TypeCuenta"].ToString();
-
-                value1.Add(cuentaId);
-
-                foreach(DataRow item2 in tagAsociados.Rows)
+           
+                foreach (DataRow item in dtCuentas.Rows)
                 {
-                    string[] cuentaTag = new string[2];
+                    query = "select NumTag from Tags where CuentaId = '" + item["Id"].ToString() + "'";
 
-                    cuentaTag[0] = item["NumCuenta"].ToString();
-                    cuentaTag[1] = item2["NumTag"].ToString(); ;
+                    var tagAsociados = ConsultasInternas(query);
 
-                    value2.Add(cuentaTag);
+                    string[] cuentaId = new string[3];
+
+                    cuentaId[0] = item["Id"].ToString();
+                    cuentaId[1] = item["NumCuenta"].ToString();
+                    cuentaId[2] = item["TypeCuenta"].ToString();
+
+                    value1.Add(cuentaId);
+
+                    foreach (DataRow item2 in tagAsociados.Rows)
+                    {
+                        string[] cuentaTag = new string[2];
+
+                        cuentaTag[0] = item["NumCuenta"].ToString();
+                        cuentaTag[1] = item2["NumTag"].ToString(); ;
+
+                        value2.Add(cuentaTag);
+                    }
+
                 }
 
-            }
-
-            object Json = new { value1, value2 };
+                object Json = new { value1, value2 };
+                   
 
             return Json;
         }
@@ -148,11 +186,8 @@ namespace WebApiSiva.SqlUser
                 }
 
             }
-
                 return dt;
         }
-            
-
-        
+                    
     }
 }

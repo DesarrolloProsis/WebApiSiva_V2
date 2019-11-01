@@ -31,6 +31,19 @@ namespace WebApiSiva
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
             services.AddDbContext<AppDbContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<GTDbContext>(x => x.UseSqlServer(Configuration.GetConnectionString("GTDBConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -68,6 +81,8 @@ namespace WebApiSiva
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseCors("AllowAll");
             app.UseMvc();
         }
     }

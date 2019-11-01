@@ -52,7 +52,15 @@ namespace WebApiSiva.Controllers
             var tokenCreated = tokenHandler.CreateToken(tokenDescriptor);
             var token = tokenHandler.WriteToken(tokenCreated);
 
-            return Ok(new { token });
+            TokenValidate tokenValidate = new TokenValidate();
+            
+            tokenValidate.Cliente = userFromRepo.NumeroCliente;
+            tokenValidate.WebToken = token;
+            tokenValidate.FechaGeneracion = DateTime.Now;
+
+            await _repo.InsertToken(tokenValidate);
+            
+            return Ok(new { token, userFromRepo.NumeroCliente });
         }
 
         [HttpPost("register")] //<host>/api/auth/register
@@ -65,7 +73,7 @@ namespace WebApiSiva.Controllers
             userForRegisterDto.Email = userForRegisterDto.Email.ToLower(); //Convert username to lower case before storing in database.
 
             if (await _repo.UserExists(userForRegisterDto.Email, userForRegisterDto.NumeroCliente))
-                return BadRequest("Email ya existe y numeroCliente");
+                return BadRequest(false);
 
             var userToCreate = new Users
             {
@@ -76,6 +84,15 @@ namespace WebApiSiva.Controllers
             var createUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
 
             return Ok(true);
+        }
+
+        [HttpPost("validateToken")]
+        public IActionResult ValidarTokenWeb([FromBody] string token)
+        {
+            if (_repo.ValidarToken(token))
+                return Ok(true);
+            else
+                return BadRequest(false);
         }
 
         [HttpGet("clientexists/{numclient}/{email}")] //<host>/api/auth/clientexists/?numclient=190311100051 or "/clientexists/?email=xxx@xxx.com
@@ -103,5 +120,7 @@ namespace WebApiSiva.Controllers
             else             
                 return BadRequest(false);
         }
+
+    
     }
 }

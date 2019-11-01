@@ -16,6 +16,48 @@ namespace WebApiSiva.Data
             _context = context;
         }
 
+        public bool ValidarToken(string webToken)
+        {
+
+            var tokenConsult = _context.TokenValidates.FirstOrDefault(x => x.WebToken == webToken);
+
+            if (tokenConsult != null)
+            {
+                if (tokenConsult.FechaGeneracion.AddHours(1) >= DateTime.Today)
+                    return false;
+                else
+                    return true;
+            }
+
+            return false;
+     
+        }
+
+        public async Task<bool> InsertToken(TokenValidate validate)
+        {
+            bool Regresa = false;
+            try
+            {
+                
+                _context.TokenValidates.Add(validate);
+                 var boleana = await _context.SaveChangesAsync();
+
+                if (boleana == 1)
+                    Regresa = true;
+                else
+                    Regresa = false;
+
+
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+            return Regresa;
+               
+        }
+
         public async Task<Users> Login(string email, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email); //Get user from database.

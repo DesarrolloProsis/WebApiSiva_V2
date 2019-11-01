@@ -16,6 +16,7 @@ namespace WebApiSiva.Data
 
         }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<TokenValidate> TokenValidates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

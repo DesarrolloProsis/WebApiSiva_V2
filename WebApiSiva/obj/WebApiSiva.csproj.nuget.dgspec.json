@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Desarrollo3\\Pictures\\WebApiSiva\\WebApiSiva\\WebApiSiva.csproj": {}
+    "C:\\Users\\Desarrollo3\\Desktop\\WebApiSiva_V2\\WebApiSiva\\WebApiSiva.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Desarrollo3\\Pictures\\WebApiSiva\\WebApiSiva\\WebApiSiva.csproj": {
+    "C:\\Users\\Desarrollo3\\Desktop\\WebApiSiva_V2\\WebApiSiva\\WebApiSiva.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Desarrollo3\\Pictures\\WebApiSiva\\WebApiSiva\\WebApiSiva.csproj",
+        "projectUniqueName": "C:\\Users\\Desarrollo3\\Desktop\\WebApiSiva_V2\\WebApiSiva\\WebApiSiva.csproj",
         "projectName": "WebApiSiva",
-        "projectPath": "C:\\Users\\Desarrollo3\\Pictures\\WebApiSiva\\WebApiSiva\\WebApiSiva.csproj",
+        "projectPath": "C:\\Users\\Desarrollo3\\Desktop\\WebApiSiva_V2\\WebApiSiva\\WebApiSiva.csproj",
         "packagesPath": "C:\\Users\\Desarrollo3\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Desarrollo3\\Pictures\\WebApiSiva\\WebApiSiva\\obj\\",
+        "outputPath": "C:\\Users\\Desarrollo3\\Desktop\\WebApiSiva_V2\\WebApiSiva\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Desarrollo3\\AppData\\Roaming\\NuGet\\NuGet.Config",

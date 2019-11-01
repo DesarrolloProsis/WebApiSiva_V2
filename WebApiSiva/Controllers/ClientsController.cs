@@ -14,6 +14,7 @@ namespace WebApiSiva.Controllers
 {
 
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
     {
@@ -24,9 +25,19 @@ namespace WebApiSiva.Controllers
             _context = context;
         }
 
+        
 
-        [HttpGet("movimientos/{idCuenta}/{numCuenta}/{fechaInicio}/{fechaFin}")]
-        public IActionResult GetCuentaMovimientos(string idCuenta, string numCuenta, string fechaInicio, string fechaFin)
+        [HttpGet("movimientosTag/{numCuenta}/{numTag}/{fechaInicio}/{fechaFin}")]
+        public IActionResult GetCuentaMovimientosTag(string numCuenta, string numTag, string fechaInicio, string fechaFin)
+        {
+            var json = querysGTDB.ObtnerMovimientoTag(numCuenta, numTag, fechaInicio, fechaFin);
+            return Ok(json);
+        }
+
+
+
+        [HttpGet("movimientosCuenta/{idCuenta}/{numCuenta}/{fechaInicio}/{fechaFin}")]
+        public IActionResult GetCuentaMovimientosCuenta(string idCuenta, string numCuenta, string fechaInicio, string fechaFin)
         {
             var json = querysGTDB.ObtenerMovimientoCuenta(idCuenta, numCuenta, fechaInicio, fechaFin);
 
