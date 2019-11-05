@@ -19,14 +19,25 @@ namespace WebApiSiva.Data
         public bool ValidarToken(string webToken)
         {
 
-            var tokenConsult = _context.TokenValidates.FirstOrDefault(x => x.WebToken == webToken);
+            var fechaActual = DateTime.Now;
+            var tokenConsult = _context.TokenValidates.FirstOrDefault(x => x.WebToken == webToken && x.FechaGeneracion.AddHours(1) > fechaActual);
+            
 
             if (tokenConsult != null)
             {
-                if (tokenConsult.FechaGeneracion.AddHours(1) >= DateTime.Today)
-                    return false;
-                else
-                    return true;
+
+                var deleteFromUser = _context.TokenValidates.Where(x => x.FechaGeneracion.AddHours(1) < DateTime.Now).ToList();
+
+                foreach (var item in deleteFromUser)
+                {
+
+                    _context.TokenValidates.Remove(item);
+                    _context.SaveChanges();
+
+                }
+
+                return true;
+              
             }
 
             return false;
@@ -38,14 +49,37 @@ namespace WebApiSiva.Data
             bool Regresa = false;
             try
             {
-                
-                _context.TokenValidates.Add(validate);
-                 var boleana = await _context.SaveChangesAsync();
 
-                if (boleana == 1)
-                    Regresa = true;
+                var TokenExist = _context.TokenValidates.Where(x => x.WebToken == validate.WebToken && x.FechaGeneracion.AddHours(1) < DateTime.Now).ToList().Count();
+
+                if (TokenExist == 0)
+                {
+
+
+                    _context.TokenValidates.Add(validate);
+                    var boleana = await _context.SaveChangesAsync();
+
+                    if (boleana == 1)
+                    {
+                        Regresa = true;
+
+                        var deleteFromUser = _context.TokenValidates.Where(x => x.FechaGeneracion.AddHours(1) < DateTime.Now).ToList();
+
+                        foreach (var item in deleteFromUser)
+                        {
+
+                            _context.TokenValidates.Remove(item);
+                            _context.SaveChanges();
+
+                        }
+                    }
+                    else
+                        Regresa = false;
+                }
                 else
+                {
                     Regresa = false;
+                }
 
 
             }

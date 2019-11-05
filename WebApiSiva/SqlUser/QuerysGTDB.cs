@@ -16,37 +16,64 @@ namespace WebApiSiva.SqlUser
 
             var dtRecargas = ConsultasInternas(query);
 
-            List<Array> value1 = new List<Array>();
+            List<MovimientosJson> value1 = new List<MovimientosJson>();
 
             foreach (DataRow item in dtRecargas.Rows)
             {
-                string[] movimientoRecargas = new string[3];
+                string[] movimientoRecargas = new string[4];
 
-                movimientoRecargas[0] = item["Concepto"].ToString();
-                movimientoRecargas[1] = item["DateTOperacion"].ToString();
-                movimientoRecargas[2] = item["Monto"].ToString();
 
-                value1.Add(movimientoRecargas);
+                if(item["Concepto"].ToString() == "TAG RECARGA")
+                {
+                  
+                    value1.Add(new MovimientosJson 
+                    {
+                        concepto = item["Concepto"].ToString(),
+                        fecha = item["DateTOperacion"].ToString(),
+                        montoInicio     = item["Monto"].ToString(),
+                        montoFin = buscaSaldoRecagasTag(numTag, Convert.ToDateTime(item["DateTOperacion"]).ToString("dd/MM/yyyy HH:mm:ss"))
+                    });
+                }
+                else
+                {
+                  
+                    value1.Add(new MovimientosJson 
+                    {
+                    concepto = item["Concepto"].ToString(),
+                    fecha = item["DateTOperacion"].ToString(),
+                    montoInicio = item["Monto"].ToString(),
+                    montoFin = "-------"
+                });
+
+                }
+            
             }
 
-            query = "select Fecha, Saldo from Historico where Fecha >= '" + fechaInicio + "' and Fecha < '" + fechaFin + "' and Tag = '" + numTag + "'";
+            query = "select Fecha, Saldo, SaldoActualizado from Historico where Fecha >= '" + fechaInicio + "' and Fecha < '" + fechaFin + "' and Tag = '" + numTag + "'";
 
             var dtCruces = ConsultasInternas(query);
 
             foreach (DataRow item2 in dtCruces.Rows)
             {
-                string[] movimientoCruces = new string[3];
+                string[] movimientoCruces = new string[4];
+                       
 
-                movimientoCruces[0] = "PEAJE";
-                movimientoCruces[1] = item2["Fecha"].ToString();
-                movimientoCruces[2] = item2["Saldo"].ToString();
+                value1.Add(new MovimientosJson 
+                {
+                concepto = "PEAJE",
+                fecha = item2["Fecha"].ToString(),
+                montoInicio = item2["Saldo"].ToString(),
+                montoFin = item2["SaldoActualizado"].ToString(),
 
-                value1.Add(movimientoCruces);
+            });
 
 
             }
 
-            object Json = new { value1 };
+
+            var Movimientos = value1.OrderBy(x => x.fecha);
+
+            object Json = new { Movimientos };
 
             return Json;
         }
@@ -58,17 +85,38 @@ namespace WebApiSiva.SqlUser
 
             var dtRecargas = ConsultasInternas(query);
 
-            List<Array> value1 = new List<Array>();
+            List<MovimientosJson> value1 = new List<MovimientosJson>();
 
             foreach(DataRow item in dtRecargas.Rows)
             {
-                string[] movimientoRecargas = new string[3];
+                string[] movimientoRecargas = new string[4];
 
-                movimientoRecargas[0] = item["Concepto"].ToString();
-                movimientoRecargas[1] = item["DateTOperacion"].ToString();
-                movimientoRecargas[2] = item["Monto"].ToString();
+                if (item["Concepto"].ToString() == "CUENTA RECARGA")
+                {
+                 
+                    value1.Add(new MovimientosJson 
+                    {
 
-                value1.Add(movimientoRecargas);
+                        concepto = item["Concepto"].ToString(),
+                        fecha = item["DateTOperacion"].ToString(),
+                        montoInicio = item["Monto"].ToString(),
+                        montoFin = buscaSaldoRecargasCuenta(numCuenta, Convert.ToDateTime(item["DateTOperacion"]).ToString("dd/MM/yyyy HH:mm:ss")),
+
+                    });
+                }
+                else
+                {
+               
+                    value1.Add(new MovimientosJson 
+                    {
+                        concepto = item["Concepto"].ToString(),
+                    fecha = item["DateTOperacion"].ToString(),
+                    montoInicio = item["Monto"].ToString(),
+                        montoFin = "-----"
+
+
+                    });
+                }
             }
 
             query = "Select * from Tags where CuentaId = '" + IdCuenta + "'";
@@ -83,33 +131,66 @@ namespace WebApiSiva.SqlUser
 
                 foreach(DataRow itemOn in dtMovimientoTag.Rows)
                 {
-                    string[] movimientoRecargasTag = new string[3];
-                    movimientoRecargasTag[0] = itemOn["Concepto"].ToString();
-                    movimientoRecargasTag[1] = itemOn["DateTOperacion"].ToString();
-                    movimientoRecargasTag[2] = itemOn["Monto"].ToString();
-                    value1.Add(movimientoRecargasTag);
+
+                    string[] movimientoRecargasTag = new string[4];
+
+                    if (itemOn["Concepto"].ToString() == "TAG RECARGA")
+                    {
+
+
+                        value1.Add(new MovimientosJson                         
+                        {
+
+                            concepto = itemOn["Concepto"].ToString(),
+                        fecha = itemOn["DateTOperacion"].ToString(),
+                        montoInicio = itemOn["Monto"].ToString(),
+                        montoFin = buscaSaldoRecagasTag(itemIn["NumTag"].ToString(), Convert.ToDateTime(itemOn["DateTOperacion"]).ToString("dd/MM/yyyy HH:mm:ss")),
+
+
+                    });
+
+                    }
+                    else
+                    {
+                        
+              
+                        value1.Add(new MovimientosJson
+                        { 
+                            
+                        concepto = itemOn["Concepto"].ToString(),
+                        fecha = itemOn["DateTOperacion"].ToString(),
+                        montoInicio = itemOn["Monto"].ToString(),
+                        montoFin = "-----",
+
+
+                    });
+                    }
                 }
             }
 
 
-            query = "select Fecha, Saldo from Historico where Fecha >= '"+fechaInicio+"' and Fecha < '"+fechaFin+"' and NumeroCuenta = '"+ numCuenta + "'";
+            query = "select Fecha, Saldo, SaldoActualizado from Historico where Fecha >= '" + fechaInicio+"' and Fecha < '"+fechaFin+"' and NumeroCuenta = '"+ numCuenta + "'";
 
             var dtCruces = ConsultasInternas(query);
 
             foreach(DataRow item2 in dtCruces.Rows)
             {
-                string[] movimientoCruces = new string[3];
+                string[] movimientoCruces = new string[4];              
 
-                movimientoCruces[0] = "PEAJE";
-                movimientoCruces[1] = item2["Fecha"].ToString();
-                movimientoCruces[2] = item2["Saldo"].ToString();
+                value1.Add(new MovimientosJson
+                {
+                    concepto = "PEAJE",
+                fecha = item2["Fecha"].ToString(),
+                montoInicio = item2["Saldo"].ToString(),
+                montoFin = item2["SaldoActualizado"].ToString(),
 
-                value1.Add(movimientoCruces);
+            });
 
             }
 
+            var Movimientos = value1.OrderBy(x => x.fecha);
 
-            object Json = new { value1 };
+            object Json = new { Movimientos };
 
             return Json;
         }
@@ -123,8 +204,9 @@ namespace WebApiSiva.SqlUser
 
 
             //string[] value1 = new string[dtCuentas.Columns.Count];
-            List<Array> value1 = new List<Array>();
-            List<Array> value2 = new List<Array>();
+            List<Array> Cuentas = new List<Array>();
+            //List<Array> Tags = new List<Array>();
+            List<TagJson> Tags = new List<TagJson>();
 
            
                 foreach (DataRow item in dtCuentas.Rows)
@@ -139,22 +221,26 @@ namespace WebApiSiva.SqlUser
                     cuentaId[1] = item["NumCuenta"].ToString();
                     cuentaId[2] = item["TypeCuenta"].ToString();
 
-                    value1.Add(cuentaId);
+                    Cuentas.Add(cuentaId);
 
                     foreach (DataRow item2 in tagAsociados.Rows)
                     {
-                        string[] cuentaTag = new string[2];
+                       //string[] item2. = new string[2];
 
-                        cuentaTag[0] = item["NumCuenta"].ToString();
-                        cuentaTag[1] = item2["NumTag"].ToString(); ;
+                        //cuentaTag[0] = item["NumCuenta"].ToString();
+                        //cuentaTag[1] = item2["NumTag"].ToString(); 
 
-                        value2.Add(cuentaTag);
-                    }
+                        Tags.Add(new TagJson
+                        {
+                            cuentaId = item["NumCuenta"].ToString(),
+                            numTag = item2["NumTag"].ToString()
+                        });
+
+                    }                    
 
                 }
 
-                object Json = new { value1, value2 };
-                   
+                object Json = new { Cuentas, Tags};            
 
             return Json;
         }
@@ -188,6 +274,77 @@ namespace WebApiSiva.SqlUser
             }
                 return dt;
         }
-                    
+        private string buscaSaldoRecargasCuenta(string numCuenta, string fechaInicio)
+        {
+
+
+            List<MovimientosJson> list = new List<MovimientosJson>();
+
+
+            string query = "select Fecha, SaldoAnterior, SaldoActualizado from Historico where Fecha > '" + fechaInicio + "' and NumeroCuenta = '" + numCuenta + "' order by Fecha asc";
+
+            var dtConsentrado = ConsultasInternas(query);
+
+            foreach (DataRow item1 in dtConsentrado.Rows)
+            {
+                list.Add(new MovimientosJson
+                {
+                    concepto = "PEAJE",
+                    fecha = item1["Fecha"].ToString(),
+                    montoInicio = item1["SaldoAnterior"].ToString(),
+                    montoFin = item1["SaldoActualizado"].ToString(),
+
+                });
+            }
+
+            if (list.Count() > 0)
+                return list[0].montoInicio.ToString();
+            else
+                return "------";
+      
+        }
+        private string buscaSaldoRecagasTag(string numTag, string fechaInicio)
+        {
+
+
+            List<MovimientosJson> list = new List<MovimientosJson>();
+
+
+            string query = "select Fecha, SaldoAnterior, SaldoActualizado from Historico where Fecha > '" + fechaInicio + "' and NumeroCuenta = '" + numTag + "' order by Fecha asc";
+
+            var dtConsentrado = ConsultasInternas(query);
+
+            foreach (DataRow item1 in dtConsentrado.Rows)
+            {
+                list.Add(new MovimientosJson
+                {
+                    concepto = "PEAJE",
+                    fecha = item1["Fecha"].ToString(),
+                    montoInicio = item1["SaldoAnterior"].ToString(),
+                    montoFin = item1["SaldoActualizado"].ToString(),
+
+                });
+            }
+
+            if (list.Count() > 0)
+                return list[0].montoInicio.ToString();
+            else
+                return "------";
+
+        }
+
     }
+    class TagJson
+    {
+        public string cuentaId { get; set; }
+        public string numTag { get; set; }
+    }
+    class MovimientosJson
+    {
+        public string concepto { get; set; }
+        public string fecha { get; set; }
+        public string montoInicio { get; set; }
+        public string montoFin { get; set; }
+    }
+  
 }

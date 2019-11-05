@@ -87,9 +87,9 @@ namespace WebApiSiva.Controllers
         }
 
         [HttpPost("validateToken")]
-        public IActionResult ValidarTokenWeb([FromBody] string token)
+        public IActionResult ValidarTokenWeb([FromBody] TokenValidate validate)
         {
-            if (_repo.ValidarToken(token))
+            if (_repo.ValidarToken(validate.WebToken))
                 return Ok(true);
             else
                 return BadRequest(false);
@@ -98,24 +98,32 @@ namespace WebApiSiva.Controllers
         [HttpGet("clientexists/{numclient}/{email}")] //<host>/api/auth/clientexists/?numclient=190311100051 or "/clientexists/?email=xxx@xxx.com
         public async Task<IActionResult> ClientExists(string numclient, string email)
         {
-          
+
             object Cliente = null;
             object Email = null;
+            string[] status = new string[1];
 
             if (numclient != null && email != null)
             {
-                Cliente = await _context.Clientes.FirstOrDefaultAsync(x => x.NumCliente == numclient);     
-                   
-                if(Cliente != null){
-                       Email = await _context.Clientes.FirstOrDefaultAsync(x => x.NumCliente == numclient && x.EmailCliente == email); 
+                Cliente = await _context.Clientes.FirstOrDefaultAsync(x => x.NumCliente == numclient);
 
-                       if(Email != null)
-                            return Ok(true);
-                        else
-                          return BadRequest(false);
-                }                
+                if (Cliente != null)
+                {
+                    Email = await _context.Clientes.FirstOrDefaultAsync(x => x.NumCliente == numclient && x.EmailCliente == email);
+
+                    if (Email != null)
+                        return Ok(true);
+                    else
+                    {
+                        status[0] = "Email Diferente";
+                        return BadRequest(status);
+                    }
+                }
                 else
-                  return BadRequest(false);  
+                {
+                    status[0] = "No Existe";
+                    return BadRequest(status);
+                }
             }
             else             
                 return BadRequest(false);
