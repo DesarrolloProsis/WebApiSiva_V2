@@ -31,7 +31,11 @@ namespace WebApiSiva.Controllers
         public IActionResult GetCuentaMovimientosTag(string numCuenta, string numTag, string fechaInicio, string fechaFin)
         {
             var json = querysGTDB.ObtnerMovimientoTag(numCuenta, numTag, fechaInicio, fechaFin);
-            return Ok(json);
+
+            if (json == null)
+                return Ok("null");
+            else
+                return Ok(json);
         }
 
 
@@ -39,9 +43,13 @@ namespace WebApiSiva.Controllers
         [HttpGet("movimientosCuenta/{idCuenta}/{numCuenta}/{fechaInicio}/{fechaFin}")]
         public IActionResult GetCuentaMovimientosCuenta(string idCuenta, string numCuenta, string fechaInicio, string fechaFin)
         {
+
             var json = querysGTDB.ObtenerMovimientoCuenta(idCuenta, numCuenta, fechaInicio, fechaFin);
 
-            return Ok(json);
+            if (json == null)
+                return Ok("null");
+            else
+                return Ok(json);
         }
 
 
