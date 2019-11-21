@@ -54,7 +54,8 @@ namespace WebApiSiva.SqlUser
                         concepto = item["Concepto"].ToString(),
                         fecha = Convert.ToDateTime(item["DateTOperacion"]),
                         montoInicio = item["Monto"].ToString(),
-                        montoFin = buscaSaldoRecagasTag(numTag, Convert.ToDateTime(item["DateTOperacion"]).ToString("dd/MM/yyyy HH:mm:ss"))
+                        montoFin = buscaSaldoRecagasTag(numTag, Convert.ToDateTime(item["DateTOperacion"]).ToString("dd/MM/yyyy HH:mm:ss")),
+                        carril = "No Aplica"
                     });
                 }
                 else
@@ -65,14 +66,15 @@ namespace WebApiSiva.SqlUser
                         concepto = item["Concepto"].ToString(),
                         fecha = Convert.ToDateTime(item["DateTOperacion"]),
                         montoInicio = item["Monto"].ToString(),
-                        montoFin = "-------"
+                        montoFin = "-------",
+                        carril = "No Aplica"
                     });
 
                 }
 
             }
 
-            query = "select Fecha, Saldo, SaldoActualizado from Historico where Fecha >= '" + fechaInicio + "' and Fecha < '" + fechaFin + "' and Tag = '" + numTag + "' order by Fecha asc";
+            query = "select Fecha, Saldo, SaldoActualizado, Carril from Historico where Fecha >= '" + fechaInicio + "' and Fecha < '" + fechaFin + "' and Tag = '" + numTag + "' order by Fecha asc";
 
             var dtCruces = ConsultasInternas(query);
 
@@ -83,10 +85,12 @@ namespace WebApiSiva.SqlUser
 
                 value1.Add(new MovimientosJson
                 {
-                    concepto = "PEAJE",
+                    concepto = "TRANSACCION",
                     fecha = Convert.ToDateTime(item2["Fecha"]),
                     montoInicio = item2["Saldo"].ToString(),
                     montoFin = item2["SaldoActualizado"].ToString(),
+                    carril = item2["Carril"].ToString(),
+                    
 
                 });
 
@@ -109,16 +113,19 @@ namespace WebApiSiva.SqlUser
                     plazas = "Autopista Palin-Escuintla",
                     fecha = item.fecha.ToString("dd/MM/yyyy HH:mm:sss"),
                     montoInicio = item.montoInicio,
-                    montoFin = item.montoFin
+                    montoFin = item.montoFin,
+                    carril = item.carril
+                    
                 });
 
-                string[] transacciones = new string[5];
+                string[] transacciones = new string[6];
 
                 transacciones[0] = item.concepto;
                 transacciones[1] = "Autopista Palin-Escuintla";
-                transacciones[2] = item.fecha.ToString("dd/MM/yyyy HH:mm:sss");
-                transacciones[3] = item.montoInicio;
-                transacciones[4] = item.montoFin;
+                transacciones[2] = item.carril;
+                transacciones[3] = item.fecha.ToString("dd/MM/yyyy HH:mm:sss");
+                transacciones[4] = item.montoInicio;
+                transacciones[5] = item.montoFin;
 
 
                 ListTransaccion[i] = transacciones;
@@ -166,6 +173,7 @@ namespace WebApiSiva.SqlUser
                         fecha = Convert.ToDateTime(item["DateTOperacion"]),
                         montoInicio = item["Monto"].ToString(),
                         montoFin = buscaSaldoRecargasCuenta(numCuenta, Convert.ToDateTime(item["DateTOperacion"]).ToString("dd/MM/yyyy HH:mm:ss")),
+                        carril = "No Aplica"
 
                     });
                                      
@@ -179,7 +187,8 @@ namespace WebApiSiva.SqlUser
                         concepto = item["Concepto"].ToString(),
                     fecha = Convert.ToDateTime(item["DateTOperacion"]),
                     montoInicio = item["Monto"].ToString(),
-                        montoFin = "-----"
+                        montoFin = "-----",
+                        carril = "No Aplica"
 
 
                     });
@@ -212,9 +221,10 @@ namespace WebApiSiva.SqlUser
                         fecha = Convert.ToDateTime(itemOn["DateTOperacion"]),
                         montoInicio = itemOn["Monto"].ToString(),
                         montoFin = buscaSaldoRecagasTag(itemIn["NumTag"].ToString(), Convert.ToDateTime(itemOn["DateTOperacion"]).ToString("dd/MM/yyyy HH:mm:ss")),
+                            carril = "No Aplica",
 
 
-                    });
+                        });
 
                     }
                     else
@@ -228,15 +238,16 @@ namespace WebApiSiva.SqlUser
                         fecha = Convert.ToDateTime(itemOn["DateTOperacion"]),
                         montoInicio = itemOn["Monto"].ToString(),
                         montoFin = "-----",
+                            carril = "No Aplica",
 
 
-                    });
+                        });
                     }
                 }
             }
 
 
-            query = "select Fecha, Saldo, SaldoActualizado from Historico where Fecha >= '" + fechaInicio+"' and Fecha < '"+fechaFin+"' and NumeroCuenta = '"+ numCuenta + "'  order by Fecha asc";
+            query = "select Fecha, Saldo, SaldoActualizado, Carril from Historico where Fecha >= '" + fechaInicio+"' and Fecha < '"+fechaFin+"' and NumeroCuenta = '"+ numCuenta + "'  order by Fecha asc";
 
             var dtCruces = ConsultasInternas(query);
 
@@ -246,12 +257,13 @@ namespace WebApiSiva.SqlUser
 
                 value1.Add(new MovimientosJson
                 {
-                    concepto = "PEAJE",
+                    concepto = "TRANSACCION",
                 fecha = Convert.ToDateTime(item2["Fecha"]),
                 montoInicio = item2["Saldo"].ToString(),
                 montoFin = item2["SaldoActualizado"].ToString(),
+                    carril = item2["Carril"].ToString(),
 
-            });
+                });
 
             }
 
@@ -269,16 +281,18 @@ namespace WebApiSiva.SqlUser
                     plazas = "Autopista Palin-Escuintla",
                     fecha = item.fecha.ToString("dd/MM/yyyy HH:mm:sss"),
                     montoInicio = item.montoInicio,
-                    montoFin = item.montoFin
+                    montoFin = item.montoFin,
+                    carril = item.carril,
                 });
 
-                string[] transacciones = new string[5];
+                string[] transacciones = new string[6];
 
                 transacciones[0] = item.concepto;
                 transacciones[1] = "Autopista Palin-Escuintla";
-                transacciones[2] = item.fecha.ToString("dd/MM/yyyy HH:mm:sss");
-                transacciones[3] = item.montoInicio;
-                transacciones[4] = item.montoFin;
+                transacciones[2] = item.carril;
+                transacciones[3] = item.fecha.ToString("dd/MM/yyyy HH:mm:sss");
+                transacciones[4] = item.montoInicio;
+                transacciones[5] = item.montoFin;
 
 
 
@@ -451,6 +465,8 @@ namespace WebApiSiva.SqlUser
         public DateTime fecha { get; set; }
         public string montoInicio { get; set; }
         public string montoFin { get; set; }
+        public string carril { get; set; }
+
     }
 
     class MovimientosJson2
@@ -460,6 +476,7 @@ namespace WebApiSiva.SqlUser
         public string fecha { get; set; }
         public string montoInicio { get; set; }
         public string montoFin { get; set; }
+        public string carril { get; set; }
     }
 
 }
