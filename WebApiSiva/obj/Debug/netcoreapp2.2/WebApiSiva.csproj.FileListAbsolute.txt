@@ -46,3 +46,19 @@ C:\Users\Desarrollo3\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\We
 C:\Users\Desarrollo3\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.RazorTargetAssemblyInfo.cache
 C:\Users\Desarrollo3\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.dll
 C:\Users\Desarrollo3\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.pdb
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Debug\netcoreapp2.2\appsettings.Development.json
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Debug\netcoreapp2.2\appsettings.json
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Debug\netcoreapp2.2\Properties\launchSettings.json
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Debug\netcoreapp2.2\WebApiSiva.deps.json
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Debug\netcoreapp2.2\WebApiSiva.runtimeconfig.json
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Debug\netcoreapp2.2\WebApiSiva.runtimeconfig.dev.json
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Debug\netcoreapp2.2\WebApiSiva.dll
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Debug\netcoreapp2.2\WebApiSiva.pdb
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.csprojAssemblyReference.cache
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.RazorAssemblyInfo.cache
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.RazorAssemblyInfo.cs
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.AssemblyInfoInputs.cache
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.AssemblyInfo.cs
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.RazorTargetAssemblyInfo.cache
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.dll
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Debug\netcoreapp2.2\WebApiSiva.pdb
