@@ -85,8 +85,9 @@ namespace WebApiSiva.Controllers
 
             var createUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
             EnviarCorreos correos = new EnviarCorreos();
-            var mensajeSeEnvio = correos.CrearCorreo(createUser.Email, createUser.Id);
+            var codigoMensajeSeEnvio = correos.CrearCorreo(createUser.Email, createUser.NumeroVerificacion);
 
+        
 
 
             return Ok(new { createUser.Id });

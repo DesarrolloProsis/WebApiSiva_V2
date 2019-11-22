@@ -123,8 +123,17 @@ namespace WebApiSiva.Data
                 };
             }
 
-            _context.Users.Update(userNew);
-            _context.SaveChanges();
+            try
+            {
+                _context.Update(userNew);   
+                _context.SaveChanges();
+            }
+
+            catch (Exception ex)
+            {
+                var str = ex;
+            }
+
 
             return true;
 
@@ -153,6 +162,7 @@ namespace WebApiSiva.Data
 
             user.Id = Guid.NewGuid().ToString();
             user.Validado = false;
+            user.NumeroVerificacion = NumeroConfirmacion();
 
             try
             {
@@ -191,29 +201,41 @@ namespace WebApiSiva.Data
             {
 
                 var userOld = _context.Users.Where(x => x.Id == tokenID && x.NumeroVerificacion == NumConfirmacion);
-                Users userNew = new Users();
+                Users userNew = userOld.First();
 
-                foreach (var item in userOld) {
-                    userNew = new Users
-                    {
-                        Id = item.Id,
-                        NumeroCliente = item.NumeroCliente,
-                        PasswordHash = item.PasswordHash,
-                        Validado = true,
-                        PasswordSalt = item.PasswordSalt,
-                    };
-                }
+                userNew.Validado = true;
 
-                _context.Users.Update(userNew);
-                _context.SaveChanges();
+             
 
+    
+                if(_context.SaveChanges() == 1)                 
                 return true;
+                else
+                  return false;
             }
             else
             {
                 return false;
             }
 
+
+        }
+        public string NumeroConfirmacion()
+        {
+
+
+            var seed = Environment.TickCount;
+            var random = new Random(seed);
+            string[] codigoVerificacion = new string[6];
+
+            for (int i = 0; i <= 5; i++)
+            {
+                var value = random.Next(0, 10);
+                codigoVerificacion[i] = value.ToString();
+            }
+            string enviar = codigoVerificacion[0] + codigoVerificacion[1] + codigoVerificacion[2] + codigoVerificacion[3] + codigoVerificacion[4] + codigoVerificacion[5];
+
+            return enviar;
 
         }
     }

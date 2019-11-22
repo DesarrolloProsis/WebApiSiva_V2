@@ -12,12 +12,12 @@ namespace WebApiSiva.SqlUser
     public class EnviarCorreos
     {
 
-        private readonly IAuthRepository _repo;
-        public bool CrearCorreo(string emailDestino, string token)
+        
+        public bool CrearCorreo(string emailDestino, string numConfirmacion)
         {
             System.Net.Mail.MailMessage mensaje = new System.Net.Mail.MailMessage();
 
-
+          
             
             mensaje.To.Add(emailDestino);
             mensaje.Subject = "Confirmacion de Activacion SIVA";
@@ -26,7 +26,7 @@ namespace WebApiSiva.SqlUser
             mensaje.Body = "Acabas de hacer un registro en la pagina de SIVA PASS " +
                             "si usted no realizo este registro porfavor de ignorar este correo"+
                             "para completar tu registro ingrese el siguiente codigo de verificacion "+
-                            "CODIGO: '"+NumeroConfirmacion(token)+"'";
+                            "CODIGO: "+numConfirmacion+"";
 
 
             mensaje.BodyEncoding = System.Text.Encoding.UTF8;
@@ -57,25 +57,7 @@ namespace WebApiSiva.SqlUser
         }
 
 
-        private string NumeroConfirmacion(string token)
-        {
-
-            
-            var seed = Environment.TickCount;
-            var random = new Random(seed);
-            string[] codigoVerificacion = new string[6];
-
-            for (int i = 0; i <= 5; i++)
-            {
-                var value = random.Next(0, 10);
-                codigoVerificacion[i] = value.ToString();
-            }
-            var enviar = codigoVerificacion[0] + codigoVerificacion[1] + codigoVerificacion[2] + codigoVerificacion[3] + codigoVerificacion[4] + codigoVerificacion[5];
-
-            var oldUser = _repo.InsertarNumero(enviar, token);
-
-            return enviar;
-        }
+      
   
 
 

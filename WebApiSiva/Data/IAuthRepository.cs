@@ -16,5 +16,6 @@ namespace WebApiSiva.Data
         bool ConfirmCliente(string tokenID, string NumConfirmacion);
         bool ValidarToken(string webToken);
         bool InsertarNumero(string NumConfirmacion, string tokenID);
+        string NumeroConfirmacion();
     }
 }
