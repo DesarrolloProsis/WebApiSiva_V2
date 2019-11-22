@@ -45,7 +45,7 @@ namespace WebApiSiva
                     });
             });
             services.AddDbContext<AppDbContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<GTDbContext>(x => x.UseSqlServer(Configuration.GetConnectionString("GTDBConnection")));
+            services.AddDbContext<AppDbConext>(x => x.UseSqlServer(Configuration.GetConnectionString("GTDBConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 

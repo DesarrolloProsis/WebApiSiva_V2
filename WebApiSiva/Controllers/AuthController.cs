@@ -23,8 +23,8 @@ namespace WebApiSiva.Controllers
     {
         private readonly IAuthRepository _repo;
         private readonly IConfiguration _config;
-        private readonly GTDbContext _context;
-        public AuthController(IAuthRepository repo, IConfiguration config, GTDbContext context)
+        private readonly AppDbConext _context;
+        public AuthController(IAuthRepository repo, IConfiguration config, AppDbConext context)
         {
             _repo = repo;
             _config = config;
@@ -104,11 +104,11 @@ namespace WebApiSiva.Controllers
             
             
         }
-        [HttpPost("confimacionCorreo/{tokenID}")]
-        public IActionResult ConfirmarCorreo(string tokenID)
+        [HttpPost("confimacionCorreo/{tokenID}/{numConfirmacion}")]
+        public IActionResult ConfirmarCorreo(string tokenID, string numConfirmacion)
         {            
 
-            if (_repo.ConfirmCliente(tokenID))
+            if (_repo.ConfirmCliente(tokenID, numConfirmacion))
                 return Ok(true);
             else
                 return Ok(false);

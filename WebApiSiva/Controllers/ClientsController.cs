@@ -18,9 +18,9 @@ namespace WebApiSiva.Controllers
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
     {
-        private readonly GTDbContext _context;
+        private readonly AppDbConext _context;
         private QuerysGTDB querysGTDB = new QuerysGTDB();
-        public ClientsController(GTDbContext context)
+        public ClientsController(AppDbConext context)
         {
             _context = context;
         }

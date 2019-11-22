@@ -52,7 +52,6 @@ C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Release\netcoreapp2.2\We
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Release\netcoreapp2.2\WebApiSiva.runtimeconfig.dev.json
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Release\netcoreapp2.2\WebApiSiva.dll
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\bin\Release\netcoreapp2.2\WebApiSiva.pdb
-C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\WebApiSiva.csprojAssemblyReference.cache
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\WebApiSiva.RazorAssemblyInfo.cache
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\WebApiSiva.RazorAssemblyInfo.cs
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\WebApiSiva.AssemblyInfoInputs.cache
@@ -60,3 +59,4 @@ C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\We
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\WebApiSiva.RazorTargetAssemblyInfo.cache
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\WebApiSiva.dll
 C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\WebApiSiva.pdb
+C:\Users\MACHINE 1\Desktop\WebApiSiva_V2\WebApiSiva\obj\Release\netcoreapp2.2\WebApiSiva.csprojAssemblyReference.cache

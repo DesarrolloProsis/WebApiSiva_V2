@@ -6,13 +6,13 @@ using WebApiSiva.Entities;
 
 namespace WebApiSiva.Entities
 {
-    public partial class GTDbContext : DbContext
+    public partial class AppDbConext : DbContext
     {
-        public GTDbContext()
+        public AppDbConext()
         {
         }
 
-        public GTDbContext(DbContextOptions<GTDbContext> options)
+        public AppDbConext(DbContextOptions<AppDbConext> options)
             : base(options)
         {
         }

@@ -105,6 +105,31 @@ namespace WebApiSiva.Data
             return user;
         }
 
+        public bool InsertarNumero(string numConfirmacion, string tokenID)
+        {
+            var oldUser = _context.Users.Where(x => x.Id == tokenID && x.Validado == false);
+            Users userNew = new Users();
+
+            foreach (var item in oldUser)
+            {
+                userNew = new Users
+                {
+                    Id = item.Id,
+                    NumeroCliente = item.NumeroCliente,
+                    PasswordHash = item.PasswordHash,
+                    Validado = true,
+                    PasswordSalt = item.PasswordSalt,
+                    NumeroVerificacion = numConfirmacion,
+                };
+            }
+
+            _context.Users.Update(userNew);
+            _context.SaveChanges();
+
+            return true;
+
+        }
+
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
@@ -160,12 +185,12 @@ namespace WebApiSiva.Data
             return false;
         }
 
-        public bool ConfirmCliente(string tokenID)
+        public bool ConfirmCliente(string tokenID, string NumConfirmacion)
         {
             if(_context.Users.Any(x => x.Id == tokenID))
             {
 
-                var userOld = _context.Users.Where(x => x.Id == tokenID);
+                var userOld = _context.Users.Where(x => x.Id == tokenID && x.NumeroVerificacion == NumConfirmacion);
                 Users userNew = new Users();
 
                 foreach (var item in userOld) {
@@ -178,6 +203,9 @@ namespace WebApiSiva.Data
                         PasswordSalt = item.PasswordSalt,
                     };
                 }
+
+                _context.Users.Update(userNew);
+                _context.SaveChanges();
 
                 return true;
             }
