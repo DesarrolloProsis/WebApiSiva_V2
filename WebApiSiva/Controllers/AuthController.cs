@@ -12,6 +12,8 @@ using WebApiSiva.Models;
 using WebApiSiva.Dtos;
 using WebApiSiva.Entities;
 using System.Linq;
+using System.Net.Mail;
+using WebApiSiva.SqlUser;
 
 namespace WebApiSiva.Controllers
 {
@@ -82,17 +84,35 @@ namespace WebApiSiva.Controllers
             };
 
             var createUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
+            EnviarCorreos correos = new EnviarCorreos();
+            var mensajeSeEnvio = correos.CrearCorreo(createUser.Email, createUser.Id);
 
-            return Ok(true);
+
+
+            return Ok(new { createUser.Id });
         }
 
         [HttpPost("validateToken")]
         public IActionResult ValidarTokenWeb([FromBody] TokenValidate validate)
         {
+
             if (_repo.ValidarToken(validate.WebToken))
                 return Ok(true);
             else
-                return BadRequest(false);
+                return Ok(false);
+
+            
+            
+        }
+        [HttpPost("confimacionCorreo/{tokenID}")]
+        public IActionResult ConfirmarCorreo(string tokenID)
+        {            
+
+            if (_repo.ConfirmCliente(tokenID))
+                return Ok(true);
+            else
+                return Ok(false);
+
         }
 
         [HttpGet("clientexists/{numclient}/{email}")] //<host>/api/auth/clientexists/?numclient=190311100051 or "/clientexists/?email=xxx@xxx.com
@@ -127,6 +147,47 @@ namespace WebApiSiva.Controllers
             }
             else             
                 return BadRequest(false);
+        }
+
+        [HttpGet("enviarCorreo")]
+        public IActionResult EnviaCorreo()
+        {
+
+            System.Net.Mail.MailMessage mensaje = new System.Net.Mail.MailMessage();
+
+            mensaje.To.Add("ramr16@outlook.com");
+            mensaje.Subject = "Confimarcion de Correo";
+            mensaje.SubjectEncoding = System.Text.Encoding.UTF8;
+
+            mensaje.Body = "Segundo Correo Enviado con C#, Me avisas si te llego este correo :P  Correo de grupo-Prosis";
+            mensaje.BodyEncoding = System.Text.Encoding.UTF8;
+            mensaje.IsBodyHtml = false;
+
+            mensaje.From = new System.Net.Mail.MailAddress("geoffreyytorres25@outlook.com");
+
+            System.Net.Mail.SmtpClient cliente = new System.Net.Mail.SmtpClient("smtp.office365.com");
+            cliente.EnableSsl = true;
+            cliente.UseDefaultCredentials = false;
+
+            cliente.Credentials = new System.Net.NetworkCredential("geoffreyytorres25@outlook.com", "Vaca$Loca69");
+            cliente.Port = 587;
+            
+
+            //cliente.Host = "smtp.gmail.com";
+
+            try
+            {
+                cliente.Send(mensaje);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+
+                
+
+            return Ok(true);
         }
 
     

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using WebApiSiva.Models;
 
@@ -126,9 +127,19 @@ namespace WebApiSiva.Data
             user.PasswordSalt = passwordSalt;
 
             user.Id = Guid.NewGuid().ToString();
+            user.Validado = false;
 
-            await _context.Users.AddAsync(user); // Adding the user to context of users.
-            await _context.SaveChangesAsync(); // Save changes to database.
+            try
+            {
+
+
+                await _context.Users.AddAsync(user); // Adding the user to context of users.
+                await _context.SaveChangesAsync(); // Save changes to database.
+            }
+            catch (Exception ex)
+            {
+                var str = ex;
+            }
 
             return user;
         }
@@ -147,6 +158,35 @@ namespace WebApiSiva.Data
             if (await _context.Users.AnyAsync(x => x.Email == email && x.NumeroCliente == numeroCliente))
                 return true;
             return false;
+        }
+
+        public bool ConfirmCliente(string tokenID)
+        {
+            if(_context.Users.Any(x => x.Id == tokenID))
+            {
+
+                var userOld = _context.Users.Where(x => x.Id == tokenID);
+                Users userNew = new Users();
+
+                foreach (var item in userOld) {
+                    userNew = new Users
+                    {
+                        Id = item.Id,
+                        NumeroCliente = item.NumeroCliente,
+                        PasswordHash = item.PasswordHash,
+                        Validado = true,
+                        PasswordSalt = item.PasswordSalt,
+                    };
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+
         }
     }
 }

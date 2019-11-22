@@ -13,6 +13,7 @@ namespace WebApiSiva.Data
         Task<Users> Register(Users user, string password);
         Task<Users> Login(string username, string pasword);
         Task<bool> UserExists(string username, string numeroCliente);
+        bool ConfirmCliente(string tokenID);
         bool ValidarToken(string webToken);
     }
 }
