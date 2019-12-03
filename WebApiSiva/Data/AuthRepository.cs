@@ -99,10 +99,19 @@ namespace WebApiSiva.Data
             if (user == null)
                 return null; // User does not exist.
 
+
             if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
                 return null;
 
             return user;
+        }
+        public bool ValidarConfirmacion(string email)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.Email == email && x.Validado == true);
+            if (user == null)
+                return false;
+            else
+                return true;
         }
 
         public bool InsertarNumero(string numConfirmacion, string tokenID)
@@ -195,19 +204,15 @@ namespace WebApiSiva.Data
             return false;
         }
 
-        public bool ConfirmCliente(string tokenID, string NumConfirmacion)
+        public bool ConfirmCliente(string email, string NumConfirmacion)
         {
-            if(_context.Users.Any(x => x.Id == tokenID))
+            if(_context.Users.Any(x => x.Email == email))
             {
 
-                var userOld = _context.Users.Where(x => x.Id == tokenID && x.NumeroVerificacion == NumConfirmacion);
-                Users userNew = userOld.First();
-
-                userNew.Validado = true;
-
-             
-
-    
+                var userOld = _context.Users.Where(x => x.Email  == email && x.NumeroVerificacion == NumConfirmacion && x.Validado == false).FirstOrDefault();
+                                
+                userOld.Validado = true;
+                 
                 if(_context.SaveChanges() == 1)                 
                 return true;
                 else
@@ -219,6 +224,18 @@ namespace WebApiSiva.Data
             }
 
 
+        }
+
+        public bool ActualizarNumeroConfirmacion(string email, string numeroNuevo)
+        {
+            var userOld = _context.Users.Where(x => x.Email == email).FirstOrDefault();
+
+            userOld.NumeroVerificacion = numeroNuevo;
+
+            if (_context.SaveChanges() == 1)
+                return true;
+            else
+                return false;
         }
         public string NumeroConfirmacion()
         {

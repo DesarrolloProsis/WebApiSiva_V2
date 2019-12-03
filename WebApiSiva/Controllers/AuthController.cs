@@ -31,12 +31,31 @@ namespace WebApiSiva.Controllers
             _context = context;
         }
 
+        [HttpGet("Llenar")]
+        public IActionResult GEt()
+        {
+            QuerysGTDB query = new QuerysGTDB();
+            query.agregarcuentasdb();
+
+            return Ok("Listo");
+        }
+        
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto userForRegisterDto)
         {
+
+            if (_repo.ValidarConfirmacion(userForRegisterDto.Email) == false)
+            {                
+                var numeroNuevo = _repo.NumeroConfirmacion();
+                _repo.ActualizarNumeroConfirmacion(userForRegisterDto.Email, numeroNuevo);
+                return Ok("SINCONFIRMAR");
+            }
+                
+
+
             var userFromRepo = await _repo.Login(userForRegisterDto.Email.ToLower(), userForRegisterDto.Password);
             if (userFromRepo == null) //User login failed
-                return Unauthorized();
+                return Ok(false);
 
             //generate token
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -105,11 +124,29 @@ namespace WebApiSiva.Controllers
             
             
         }
-        [HttpPost("confimacionCorreo/{tokenID}/{numConfirmacion}")]
-        public IActionResult ConfirmarCorreo(string tokenID, string numConfirmacion)
+
+        [HttpPost("reenviarCorreo/{email}")]
+        public IActionResult ReenviarCorreo(string email)
+        {
+
+            
+            EnviarCorreos correos = new EnviarCorreos();
+            var numConfirmaionNuevo = _repo.NumeroConfirmacion();
+            _repo.ActualizarNumeroConfirmacion(email, numConfirmaionNuevo);
+            if (correos.CrearCorreo(email, numConfirmaionNuevo))
+                return Ok(true);
+            else
+                return Ok(false);
+
+
+            
+        }
+
+        [HttpPost("confimacionCorreo/{email}/{numConfirmacion}")]
+        public IActionResult ConfirmarCorreo(string email, string numConfirmacion)
         {            
 
-            if (_repo.ConfirmCliente(tokenID, numConfirmacion))
+            if (_repo.ConfirmCliente(email, numConfirmacion))
                 return Ok(true);
             else
                 return Ok(false);

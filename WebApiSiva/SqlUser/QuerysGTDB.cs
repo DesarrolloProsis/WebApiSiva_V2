@@ -11,27 +11,27 @@ namespace WebApiSiva.SqlUser
     public class QuerysGTDB
     {
 
-        //public void AgregarCuentasDB()
-        //{
-        //    string query = "select NumCuenta, Id, TypeCuenta from CuentasTelepeajes";
+        public void agregarcuentasdb()
+        {
+            string query = "select numcuenta, id, typecuenta from cuentastelepeajes";
 
-        //    var dt = ConsultasInternas(query);
+            var dt = ConsultasInternas(query);
 
-        //    foreach(DataRow item in dt.Rows)
-        //    {
-        //        query = "select NumTag from Tags where CuentaId = '" + item["Id"].ToString() + "'";
+            foreach (DataRow item in dt.Rows)
+            {
+                query = "select numtag from tags where cuentaid = '" + item["id"].ToString() + "'";
 
-        //        var dtTag = ConsultasInternas(query);
+                var dttag = ConsultasInternas(query);
 
 
-        //        foreach (DataRow item2 in dtTag.Rows)
-        //        {
-        //            query = "UPDATE Historico set NumeroCuenta = '" + item["NumCuenta"].ToString() + "', TipoCuenta = '" + item["TypeCuenta"].ToString() + "' where Tag = '" + item2["NumTag"].ToString() + "' and NumeroCuenta is null";
-        //            ConsultasInternas(query);
-        //        }
-        //    }
+                foreach (DataRow item2 in dttag.Rows)
+                {
+                    query = "update historico set numerocuenta = '" + item["numcuenta"].ToString() + "', tipocuenta = '" + item["typecuenta"].ToString() + "' where tag = '" + item2["numtag"].ToString() + "' and numerocuenta is null";
+                    ConsultasInternas(query);
+                }
+            }
 
-        //}
+        }
 
         public object ObtnerMovimientoTag(string numCuenta, string numTag, string fechaInicio, string fechaFin)
         {
@@ -221,7 +221,7 @@ namespace WebApiSiva.SqlUser
                         fecha = Convert.ToDateTime(itemOn["DateTOperacion"]),
                         montoInicio = itemOn["Monto"].ToString(),
                         montoFin = buscaSaldoRecagasTag(itemIn["NumTag"].ToString(), Convert.ToDateTime(itemOn["DateTOperacion"]).ToString("dd/MM/yyyy HH:mm:ss")),
-                            carril = "No Aplica",
+                            carril = "Punto de Venta",
 
 
                         });
@@ -238,7 +238,7 @@ namespace WebApiSiva.SqlUser
                         fecha = Convert.ToDateTime(itemOn["DateTOperacion"]),
                         montoInicio = itemOn["Monto"].ToString(),
                         montoFin = "-----",
-                            carril = "No Aplica",
+                            carril = "Punto de Venta",
 
 
                         });
@@ -267,7 +267,7 @@ namespace WebApiSiva.SqlUser
 
             }
 
-            var JsonList = value1.OrderByDescending(x => x.fecha).ToList();
+            var JsonList = value1.OrderBy(x => x.fecha).ToList();
             List <MovimientosJson2>  Movimientos = new List<MovimientosJson2>();
 
             object[] ListTransaccion = new object[JsonList.Count()];
